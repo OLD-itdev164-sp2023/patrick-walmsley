@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import { graphql, Link } from "gatsby"
+import { GatsbyImage } from "gatsby-plugin-image"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
@@ -11,12 +11,13 @@ const IndexPage = ({ data }) => (
     <Seo title="Home" />
     <ul className={styles.list}>
       {
-        data.allContentfullBlogPost.edges.map(edge => (
+        data.allContentfulBlogPost.edges.map(edge => (
           <li key={edge.node.id}>
             <Link to={edge.node.slug}>{edge.node.title}</Link>
             <div>
-              <Gatsby Image
+              <GatsbyImage
                 image={edge.node.heroImage.gatsbyImageData}
+                alt=""
               />
             </div>
             <div>
@@ -28,23 +29,26 @@ const IndexPage = ({ data }) => (
     </ul>
   </Layout>
 )
+export const Head = () => <Seo title="Home" />
 
-export const query = graphl`
+export default IndexPage;
+
+export const query = graphql`
   {
     allContentfulBlogPost {
       edges {
         node {
-          id
+          id 
           title
-          slug
+          slug 
           body {
-            childMarkdownRequest {
-              excerpt
+						childMarkdownRemark {
+							excerpt
             }
           }
-          heroImage{
-            gastbyImageData(
-              layout: CONSTRAINED
+          heroImage {
+						gatsbyImageData(
+							layout: CONSTRAINED
               placeholder: BLURRED
               width: 300
             )
